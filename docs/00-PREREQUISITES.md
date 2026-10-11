@@ -1,26 +1,15 @@
 # Prerequisites
 
-## What you need on your PC
+- Kaggle file **`GlobalWeatherRepository.csv`** ([dataset](https://www.kaggle.com/datasets/nelgiriyewithana/global-weather-repository)) — not committed to git.
+- Databricks workspace with SQL warehouse and Unity Catalog (Free Edition is sufficient).
+- This repository cloned locally.
 
-- The Kaggle CSV: `GlobalWeatherRepository.csv` (~50 MB) from [Global Weather Repository](https://www.kaggle.com/datasets/nelgiriyewithana/global-weather-repository).
-- A browser (Chrome or Edge recommended).
-- This repo cloned or opened at `C:\Users\manol\Projects\weather-databricks-pipeline`.
+## Naming (this repo)
 
-## Naming (use consistently)
+| Object | Value |
+|--------|--------|
+| Catalog | `weather_pipeline` |
+| Landing volume | `/Volumes/weather_pipeline/landing/weather_raw/` |
+| Schemas | `weather_bronze`, `weather_silver`, `weather_gold`, `weather_dq` |
 
-| Object | This project |
-|--------|----------------|
-| Catalog | `weather_pipeline` (created in UI) |
-| Landing schema + volume | `landing` / `weather_raw` |
-| Bronze / silver / gold / dq | `weather_bronze`, `weather_silver`, `weather_gold`, `weather_dq` |
-| CSV in volume | `/Volumes/weather_pipeline/landing/weather_raw/GlobalWeatherRepository.csv` |
-
-Free Edition may also expose a `workspace` or `main` catalog; if you use that instead, update `USE CATALOG` in all `sql/*.sql` files and the volume path in `01_bronze.sql`.
-
-## Checkpoint
-
-- [ ] CSV downloaded locally  
-- [ ] Repo on disk  
-- [ ] You know which email you will use for Databricks (work or personal is fine)
-
-Next: **[01-SIGNUP-AND-WORKSPACE.md](01-SIGNUP-AND-WORKSPACE.md)**
+See [01-SIGNUP-AND-WORKSPACE.md](01-SIGNUP-AND-WORKSPACE.md), then [02-RUN-SQL-PIPELINE.md](02-RUN-SQL-PIPELINE.md).

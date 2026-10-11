@@ -1,6 +1,3 @@
 # Screenshots
 
-Optional images for documentation:
-
-- Job run (all tasks succeeded)
-- Dashboard pages: layer counts, DQ table, Kyiv series
+Captured from Databricks after a successful `weather_medallion_pipeline` run and publishing **Weather pipeline ops**.

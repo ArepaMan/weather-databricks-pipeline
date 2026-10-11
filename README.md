@@ -35,7 +35,13 @@ GlobalWeatherRepository.csv  (volume: landing/weather_raw)
 | Quarantine | 2 |
 | DQ checks | 6 / 6 pass |
 
-Details and dashboard URL: [docs/DEMO.md](docs/DEMO.md).
+Deployment URL and object names: [docs/DEMO.md](docs/DEMO.md).
+
+## Screenshots
+
+| Job run | Layer counts | DQ checks | Kyiv series |
+|---------|--------------|-----------|-------------|
+| ![Job](docs/screenshots/job-run-success.png) | ![Layers](docs/screenshots/dashboard-layer-counts.png) | ![DQ](docs/screenshots/dashboard-dq.png) | ![Kyiv](docs/screenshots/dashboard-kyiv.png) |
 
 ## Repository layout
 

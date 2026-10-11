@@ -1,90 +1,28 @@
 # Job and dashboard
 
-## Part A — Databricks Job (ETL automation)
+## Workflow job
 
-### Option 1 — Workflow UI (recommended for learning)
+1. **Jobs & Pipelines** → **Create job** → name: `weather_medallion_pipeline`.
+2. Add four **SQL** tasks, each pointing at a saved query (or pasted script body):
 
-1. Left sidebar → **Jobs & Pipelines** → **Create job**.
-2. Name: `weather-medallion-daily` (schedule can be manual for learning).
-3. Add **Tasks** (type **SQL**), same warehouse `weather-sql`:
+| Task | Script | Depends on |
+|------|--------|------------|
+| `bronze` | `sql/01_bronze.sql` | — |
+| `silver` | `sql/02_silver.sql` | `bronze` |
+| `gold` | `sql/03_gold.sql` | `silver` |
+| `dq` | `sql/04_data_quality.sql` | `gold` |
 
-| Task key | SQL source |
-|----------|------------|
-| `bronze` | Paste contents of `sql/01_bronze.sql` |
-| `silver` | `sql/02_silver.sql` — **depends on** `bronze` |
-| `gold` | `sql/03_gold.sql` — **depends on** `silver` |
-| `dq` | `sql/04_data_quality.sql` — **depends on** `gold` |
+3. Use the same serverless SQL warehouse for all tasks.
+4. **Run now** to validate the chain.
 
-4. **Run now** → confirm all tasks green.
-5. (Optional) Add schedule: daily at 06:00 — only useful if you refresh the CSV; for a static Kaggle file, **manual run** is enough.
+For a static Kaggle extract, a schedule is optional; manual runs are enough unless the landing file is refreshed.
 
-**Checkpoint:** One successful multi-task run in **Runs** tab.
+## SQL dashboard
 
-### Option 2 — Notebook wrapper (if SQL tasks are unavailable)
+Lakeview dashboard **Weather pipeline ops** uses SQL datasets on gold and DQ tables, for example:
 
-Create a notebook with four `%sql` cells, one per script, and create a **Notebook task** job. Same dependency order.
+- `weather_gold.gold_data_profile` — row counts by layer
+- `weather_dq.pipeline_checks` — latest check status per `check_name`
+- `weather_gold.gold_kyiv_daily` — line chart (`observation_date` vs `avg_temperature_c`; use **AVG**, not **SUM**, on the measure)
 
----
-
-## Part B — SQL dashboard
-
-1. **SQL** → **Dashboards** → **Create dashboard**.
-2. Name: `Weather pipeline KPIs`.
-3. Add widgets (each is a saved SQL query):
-
-**Widget 1 — Pipeline health**
-
-```sql
-SELECT check_name, status, failed_rows
-FROM main.weather_dq.pipeline_checks
-QUALIFY ROW_NUMBER() OVER (PARTITION BY check_name ORDER BY checked_at DESC) = 1
-ORDER BY check_name;
-```
-
-Visualization: **Table**, conditional formatting on `status`.
-
-**Widget 2 — Layer row counts**
-
-```sql
-SELECT * FROM main.weather_gold.gold_data_profile ORDER BY layer;
-```
-
-Visualization: **Bar chart** (`layer` vs `row_count`).
-
-**Widget 3 — Kyiv temperature trend**
-
-```sql
-SELECT observation_date, avg_temperature_c
-FROM main.weather_gold.gold_kyiv_daily
-ORDER BY observation_date;
-```
-
-Visualization: **Line chart**.
-
-**Widget 4 — Top 10 warmest countries (mean temp)**
-
-```sql
-SELECT country, ROUND(AVG(avg_temperature_c), 2) AS mean_temp
-FROM main.weather_gold.gold_country_daily_temp
-GROUP BY country
-ORDER BY mean_temp DESC
-LIMIT 10;
-```
-
-Visualization: **Bar chart**.
-
-4. **Publish** → copy link (viewers need workspace access).
-
-**Checkpoint:** Dashboard loads in &lt;30s with four widgets.
-
----
-
-## Part C — Git hygiene
-
-```powershell
-cd C:\Users\manol\Projects\weather-databricks-pipeline
-git add -A
-git status   # confirm no CSV committed
-```
-
-Do not commit the Kaggle CSV (`git status` should not list `*.csv`).
+Publish from the dashboard editor. Shared links require Databricks workspace access; see [DEMO.md](DEMO.md) for the published URL and [screenshots/](screenshots/) for static captures.

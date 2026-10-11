@@ -28,4 +28,4 @@ Republish without dashboard filters if you want a shorter share URL.
 
 ## Screenshots
 
-Optional captures under `docs/screenshots/` for README or talks (see `docs/screenshots/README.md`).
+Committed under `docs/screenshots/` (`job-run-success.png`, `dashboard-layer-counts.png`, `dashboard-dq.png`, `dashboard-kyiv.png`). Embedded in the root README.
