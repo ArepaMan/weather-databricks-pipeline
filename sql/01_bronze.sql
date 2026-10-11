@@ -1,4 +1,4 @@
--- Bronze: load CSV from Unity Catalog volume into Delta (full refresh for learning project).
+-- Bronze: load CSV from Unity Catalog volume into Delta (full refresh).
 USE CATALOG weather_pipeline;
 
 CREATE OR REPLACE TABLE weather_bronze.global_weather_raw

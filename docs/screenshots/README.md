@@ -1,10 +1,6 @@
 # Screenshots
 
-Drop portfolio images here:
+Optional images for documentation:
 
-- `job-run-success.png`
-- `dashboard-layer-counts.png`
-- `dashboard-dq.png`
-- `dashboard-kyiv.png`
-
-Referenced from [DEMO.md](../DEMO.md).
+- Job run (all tasks succeeded)
+- Dashboard pages: layer counts, DQ table, Kyiv series

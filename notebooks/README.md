@@ -15,4 +15,4 @@ for name in ["01_bronze", "02_silver", "03_gold", "04_data_quality"]:
     spark.sql(sql)  # or use sqldf / SQL warehouse API
 ```
 
-Free Edition: simplest path is **four SQL tasks** in one Job (see main README Phase 4).
+Free Edition: simplest path is **four SQL tasks** in one Job (see docs/03-JOB-AND-DASHBOARD.md).

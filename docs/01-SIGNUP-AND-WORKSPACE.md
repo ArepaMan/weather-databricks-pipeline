@@ -1,4 +1,4 @@
-# Phase 1 — Databricks account and workspace
+# Databricks workspace setup
 
 ## Step 1 — Create a Free Edition account
 

@@ -1,4 +1,4 @@
-# Phase 2 — Run the medallion SQL
+# Run the SQL pipeline
 
 Run scripts **in order** in the **SQL Editor** (warehouse `weather-sql`). Each file is idempotent where possible (`CREATE OR REPLACE` / `MERGE` patterns).
 
@@ -83,11 +83,5 @@ ORDER BY checked_at DESC, check_name;
 **Checkpoint:** All checks **PASS** (or you document known FAILs — e.g. if you intentionally keep scrape errors in silver).
 
 ---
-
-## What to screenshot for your portfolio
-
-- SQL Editor showing `gold_data_profile` results  
-- `pipeline_checks` all PASS  
-- Catalog tree with four schemas  
 
 Next: **[03-JOB-AND-DASHBOARD.md](03-JOB-AND-DASHBOARD.md)**

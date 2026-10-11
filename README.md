@@ -1,64 +1,77 @@
-# Weather medallion pipeline on Databricks
+# weather-databricks-pipeline
 
-Bronze → silver → gold ETL on the Kaggle **Global Weather Repository**, with data-quality checks and a SQL dashboard. Built to demonstrate **basic Databricks** and **practical ETL/ELT** for analyst-style roles (personal learning project).
+Medallion **bronze → silver → gold** pipeline in Databricks SQL on the Kaggle [Global Weather Repository](https://www.kaggle.com/datasets/nelgiriyewithana/global-weather-repository). Raw CSV lands in a Unity Catalog volume; transforms run as SQL into Delta tables, with a quarantine path for bad rows, automated data-quality checks, a workflow job, and a SQL dashboard.
 
-**Dataset:** same CSV as [`weather-trend-forecasting`](https://github.com/ArepaMan/weather-trend-forecasting) — place `GlobalWeatherRepository.csv` in a Unity Catalog volume (not in git).
+Companion repo for exploratory analysis and forecasting: [weather-trend-forecasting](https://github.com/ArepaMan/weather-trend-forecasting) (same dataset, different stack).
 
-## Results (completed run)
+## Architecture
 
-| Metric | Value |
-|--------|--------|
-| Bronze | 167,813 rows |
-| Silver (clean) | 167,811 |
+```
+GlobalWeatherRepository.csv  (volume: landing/weather_raw)
+        │
+        ▼
+  weather_bronze.global_weather_raw
+        │
+        ▼
+  weather_silver.global_weather          ──► weather_silver.global_weather_quarantine
+        │
+        ▼
+  weather_gold.*  (aggregates)
+        │
+        ▼
+  weather_dq.pipeline_checks
+```
+
+**Catalog:** `weather_pipeline`  
+**Job:** `weather_medallion_pipeline` (`bronze` → `silver` → `gold` → `dq`)  
+**Dashboard:** Weather pipeline ops
+
+## Reference run (Oct 2026)
+
+| Layer | Rows |
+|-------|------|
+| Bronze | 167,813 |
+| Silver | 167,811 |
 | Quarantine | 2 |
-| DQ checks | 6 PASS |
-| Job | `weather_medallion_pipeline` (bronze → silver → gold → dq) |
-| Dashboard | **Weather pipeline ops** |
+| DQ checks | 6 / 6 pass |
 
-**Demo write-up:** [docs/DEMO.md](docs/DEMO.md) (dashboard link, screenshot checklist, application one-liner).
-
-## What you will deliver
-
-| Artifact | Purpose |
-|----------|---------|
-| Delta tables (bronze / silver / gold / quarantine) | Medallion lakehouse |
-| `sql/04_data_quality.sql` | Pass/fail DQ report table |
-| Databricks **Job** (4 tasks) | Scheduled ETL |
-| **SQL dashboard** | Gold-layer KPIs |
-| This repo + short LinkedIn/application blurb | Portfolio proof |
-
-## Start here
-
-Follow the guide in order (about **6–10 hours** total, spread over 2–3 days):
-
-1. **[docs/00-PREREQUISITES.md](docs/00-PREREQUISITES.md)** — accounts, CSV, naming conventions  
-2. **[docs/01-SIGNUP-AND-WORKSPACE.md](docs/01-SIGNUP-AND-WORKSPACE.md)** — Databricks Free Edition, SQL warehouse, volume upload  
-3. **[docs/02-RUN-SQL-PIPELINE.md](docs/02-RUN-SQL-PIPELINE.md)** — run `sql/01`–`04` in order  
-4. **[docs/03-JOB-AND-DASHBOARD.md](docs/03-JOB-AND-DASHBOARD.md)** — workflow job + dashboard  
-5. **[docs/04-INTERVIEW-STORY.md](docs/04-INTERVIEW-STORY.md)** — how to describe the project honestly  
-
-Optional course (parallel): [Databricks Fundamentals](https://customer-academy.databricks.com/) on Databricks Academy.
+Details and dashboard URL: [docs/DEMO.md](docs/DEMO.md).
 
 ## Repository layout
 
 ```
 sql/
-  00_setup_catalog.sql      # schemas + volume path (run once)
-  01_bronze.sql             # ingest raw CSV → Delta
-  02_silver.sql             # clean + quarantine bad rows
-  03_gold.sql               # analyst-ready aggregates
-  04_data_quality.sql       # checks → dq_results
-docs/                       # step-by-step guides
+  00_setup_catalog.sql
+  01_bronze.sql
+  02_silver.sql
+  03_gold.sql
+  04_data_quality.sql
+docs/
+  00-PREREQUISITES.md
+  01-SIGNUP-AND-WORKSPACE.md
+  02-RUN-SQL-PIPELINE.md
+  03-JOB-AND-DASHBOARD.md
 ```
+
+## Quick start
+
+1. Download `GlobalWeatherRepository.csv` from Kaggle (not stored in git).
+2. Follow [docs/01-SIGNUP-AND-WORKSPACE.md](docs/01-SIGNUP-AND-WORKSPACE.md) to create the catalog, volume, and upload path.
+3. Run `sql/00_setup_catalog.sql` through `sql/04_data_quality.sql` in order in the SQL editor ([docs/02-RUN-SQL-PIPELINE.md](docs/02-RUN-SQL-PIPELINE.md)).
+4. Wire the same scripts into a job and dashboard ([docs/03-JOB-AND-DASHBOARD.md](docs/03-JOB-AND-DASHBOARD.md)).
 
 ## Configuration
 
-This project was built with catalog **`weather_pipeline`**, schema **`landing`** + volume **`weather_raw`** for the CSV, and schemas `weather_bronze`, `weather_silver`, `weather_gold`, `weather_dq`. Adjust paths in `sql/00_setup_catalog.sql` and `sql/01_bronze.sql` if your workspace differs.
-
-**Volume path used:**
+Default volume path (edit in `sql/01_bronze.sql` if needed):
 
 `/Volumes/weather_pipeline/landing/weather_raw/GlobalWeatherRepository.csv`
 
+Schemas: `weather_bronze`, `weather_silver`, `weather_gold`, `weather_dq`, plus `landing` for the volume.
+
+## License
+
+No license file yet — treat as source-available personal project unless you add one.
+
 ## Author
 
-Manuel Vargas Alvarez — personal learning project (2026).
+Manuel Vargas Alvarez (2026).

@@ -1,13 +1,4 @@
-# Phase 0 — Prerequisites
-
-## Time
-
-| Block | Hours |
-|-------|-------|
-| Signup + workspace | 1–2 |
-| First SQL + bronze/silver/gold | 3–4 |
-| DQ + job + dashboard | 2–3 |
-| Fundamentals course (optional) | 2–3 |
+# Prerequisites
 
 ## What you need on your PC
 

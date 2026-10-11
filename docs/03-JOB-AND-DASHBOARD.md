@@ -1,4 +1,4 @@
-# Phase 3 — Job workflow and dashboard
+# Job and dashboard
 
 ## Part A — Databricks Job (ETL automation)
 
@@ -73,7 +73,7 @@ LIMIT 10;
 
 Visualization: **Bar chart**.
 
-4. **Share** → copy link (workspace-only is fine for interviews).
+4. **Publish** → copy link (viewers need workspace access).
 
 **Checkpoint:** Dashboard loads in &lt;30s with four widgets.
 
@@ -87,6 +87,4 @@ git add -A
 git status   # confirm no CSV committed
 ```
 
-Commit when ready (you ask when you want a commit message).
-
-Next: **[04-INTERVIEW-STORY.md](04-INTERVIEW-STORY.md)**
+Do not commit the Kaggle CSV (`git status` should not list `*.csv`).
